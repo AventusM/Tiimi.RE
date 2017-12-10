@@ -1,9 +1,5 @@
 package ohtu;
 
-import java.sql.Date;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.sql.*;
 import ohtu.Dao.BookDao;
 import java.util.HashMap;
 import java.util.List;
@@ -13,16 +9,20 @@ import ohtu.domain.Book;
 import ohtu.domain.Video;
 import spark.ModelAndView;
 import spark.Spark;
-import static spark.Spark.port;
+//import static spark.Spark.port;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 public class Main {
+    
+//    public static String checkBoxCheck(String checkBoxValue){
+//        
+//    }
 
     public static void main(String[] args) throws Exception {
         // asetetaan portti jos heroku antaa PORT-ympäristömuuttujan
-        if (System.getenv("PORT") != null) {
-            port(Integer.valueOf(System.getenv("PORT")));
-        }
+//        if (System.getenv("PORT") != null) {
+//            port(Integer.valueOf(System.getenv("PORT")));
+//        }
         Database database = new Database("jdbc:sqlite:tietokanta.db");
         BookDao books = new BookDao(database);
         VideoDao videos = new VideoDao(database);

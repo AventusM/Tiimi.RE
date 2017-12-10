@@ -15,11 +15,14 @@
             <input type="text" name="ISBN" th:value="${book.ISBN}"/><br/>
             <label>Tags:</label><br/>
             <input type="text" name="tags" th:value="${book.tags}"/><br/>  
-            <div class="checkbox">
-                <label>
-                    <input name="box" type="checkbox">Read</input>
-                </label>
-            </div>
+                <div class="checkbox">
+                    <label th:if="${book.seen != true}">
+                        <input name="box" type="checkbox">Read</input>
+                    </label>
+                    <label th:if="${book.seen == true}">
+                        <input name="box" type="checkbox" checked>Read</input>
+                    </label>
+                </div>
             <button type="submit" name="send">Edit</button>
         </form>
 

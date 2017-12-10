@@ -16,28 +16,32 @@
                 <tbody>
                     <tr>
                         <th>Title:</th>
-                        <td><span th:placeholder="${video.title}">Title</span></td>
+                        <td><span th:text="${video.title}">Title</span></td>
                     </tr>
                     <tr>
                         <th>url</th>
-                        <td><span th:placeholder="${video.url}">Url</span></td> 
+                        <td><a th:href="${video.url}"><span th:text="${video.url}">Url</span> </a></td> 
 
                     </tr>
                     <tr>
                         <th>Comment:</th>
-                        <td><span th:placeholder="${video.comment}">Comment</span></td>
+                        <td><span th:text="${video.comment}">Comment</span></td>
                     </tr>
                     <tr> 
                         <th>Tags:</th>
-                        <td><span th:placeholder="${video.tags}">Tags</span></td>
+                        <td><span th:text="${video.tags}">Tags</span></td>
                     </tr>
                     <tr>
                         <th>Date:</th>
                         <td><span th:text="${video.time}">Date</span></td>
                     </tr>
-                    <tr>
+                    <tr th:if="${video.seen} == true">
                         <th>Watched:</th>
-                        <td><span th:text="${video.seen}">Watched</span></td>
+                        <td><span>yes</span></td>
+                    </tr>
+                    <tr th:if="${video.seen} != true">
+                        <th>Watched:</th>
+                        <td><span>no</span></td>
                     </tr>
                 </tbody>
             </table>
