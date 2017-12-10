@@ -17,8 +17,11 @@
                 <label>Tags:</label><br/>
                 <input type="text" name="tags" th:value="${video.tags}"/><br/>  
                 <div class="checkbox">
-                    <label>
+                    <label th:if="${video.seen != true}">
                         <input name="box" type="checkbox">Watched</input>
+                    </label>
+                    <label th:if="${video.seen == true}">
+                        <input name="box" type="checkbox" checked>Watched</input>
                     </label>
                 </div>
                 <button type="submit" name="send">Edit</button>
