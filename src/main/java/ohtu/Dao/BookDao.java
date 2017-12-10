@@ -193,7 +193,7 @@ public class BookDao implements Dao<Book, Integer> {
         statement.setInt(1, key);
         statement.executeUpdate();
 
-//        statement.close();
+        statement.close();
 //        PreparedStatement stmt = connection.prepareStatement("DELETE OR IGNORE FROM BookTags WHERE book_id = ?");
 //        statement.setInt(1, key);
 //        stmt.executeUpdate();
