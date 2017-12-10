@@ -18,13 +18,13 @@ public class Stepdefs {
 
     WebDriver driver = new HtmlUnitDriver();
     String baseUrl = "http://localhost:4567/";
-    HomePage homePage = new HomePage(driver, baseUrl);
-    BooksPage booksPage = new BooksPage(driver, baseUrl);
-    BookPage bookPage = new BookPage(driver, baseUrl);
-    BookEditPage bookEditPage = new BookEditPage(driver, baseUrl);
-    VideosPage videosPage = new VideosPage(driver, baseUrl);
-    VideoPage videoPage = new VideoPage(driver, baseUrl);
-    VideoEditPage videoEditPage = new VideoEditPage(driver, baseUrl);
+    private HomePage homePage = new HomePage(driver, baseUrl);
+    private BooksPage booksPage = new BooksPage(driver, baseUrl);
+    private BookPage bookPage = new BookPage(driver, baseUrl);
+    private BookEditPage bookEditPage = new BookEditPage(driver, baseUrl);
+    private VideosPage videosPage = new VideosPage(driver, baseUrl);
+    private VideoPage videoPage = new VideoPage(driver, baseUrl);
+    private VideoEditPage videoEditPage = new VideoEditPage(driver, baseUrl);
 
     public Stepdefs() {
         homePage.goToPage();
