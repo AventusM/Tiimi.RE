@@ -34,9 +34,13 @@
                     <th>Date:</th>
                     <td><span th:text="${book.time}">Date</span></td>
                 </tr>
-                <tr>
+                <tr th:if="${book.seen} == true">
                     <th>Read:</th>
-                    <td><span th:text="${book.seen}">Read</span></td>
+                    <td><span>yes</span></td>
+                </tr>
+                <tr th:if="${book.seen} != true">
+                    <th>Read:</th>
+                    <td><span>no</span></td>
                 </tr>
             </tbody>
         </table>

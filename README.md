@@ -9,5 +9,3 @@
 
 
 [Product Backlog](https://docs.google.com/spreadsheets/d/1ABNWAdlr5OvDHyH26hEjbx5y6wYpSsZmUwgyDC1xI0g/edit#gid=0)
-
-[Heroku](https://salty-hollows-62760.herokuapp.com/)
