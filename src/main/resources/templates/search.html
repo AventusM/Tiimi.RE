@@ -26,31 +26,35 @@
                             </ul>
 
                             <label>Search using tags:</label>
-                            <input type="text" name="title" value=""/><button type="submit" name="send">Search!</button><br/>
+
+                            <form method="GET" action="/search">
+                                <input type="text" name="tag" value=""/><button type="submit">Search!</button><br/>
+                            </form>
+
                             <br>
-                            <ul>
-                                <li th:each="book : ${books}">
+                                <ul>
+                                    <li th:each="book : ${books}">
 
-                                    <td>
-                                        <form method="post" th:action="@{~/books/{id}(id=${book.id})}" onsubmit="return false;">
-                                            <a th:href="@{~/books/{id}(id=${book.id})}" name="bookInstance">
-                                                <span th:text="${book.title}">Title</span>
-                                            </a>
+                                        <td>
+                                            <form method="post" th:action="@{~/books/{id}(id=${book.id})}" onsubmit="return false;">
+                                                <a th:href="@{~/books/{id}(id=${book.id})}" name="bookInstance">
+                                                    <span th:text="${book.title}">Title</span>
+                                                </a>
 
-                                        </form>
-                                    </td>
-                                </li>
-                                <li th:each="video : ${videos}">
+                                            </form>
+                                        </td>
+                                    </li>
+                                    <li th:each="video : ${videos}">
 
-                                    <td>
-                                        <form method="post" th:action="@{~/videos/{id}(id=${video.id})}">
-                                            <a th:href="@{~/videos/{id}(id=${video.id})}" name="videoInstance">
-                                                <span th:text="${video.title}">Title</span>
-                                            </a>                        
-                                        </form>
-                                    </td>
-                                </li>
-                            </ul>
+                                        <td>
+                                            <form method="post" th:action="@{~/videos/{id}(id=${video.id})}">
+                                                <a th:href="@{~/videos/{id}(id=${video.id})}" name="videoInstance">
+                                                    <span th:text="${video.title}">Title</span>
+                                                </a>                        
+                                            </form>
+                                        </td>
+                                    </li>
+                                </ul>
                         </div>
 
                         <script>

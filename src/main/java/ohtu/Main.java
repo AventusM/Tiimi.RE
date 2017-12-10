@@ -170,7 +170,11 @@ public class Main {
         });
 
         Spark.get("/search", (req, res) -> {
+            
+          
             HashMap map = new HashMap<>();
+            System.out.println(req.queryParams("tag"));
+            
             map.put("videos", videos.findAll());
             map.put("books", books.findAll());
 
