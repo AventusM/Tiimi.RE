@@ -48,27 +48,46 @@ public class BookDao implements Dao<Book, Integer> {
         return users;
     }
 
-    public List<Book> findAllWithTag(String tag) throws SQLException {
-        List<Book> users = new ArrayList<>();
+    public boolean doesTagExist(String tagName) throws SQLException {
+        System.out.println("tutkitaan onko " + tagName + " tietokannassa");
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Tags WHERE tagName = ?");
+            stmt.setString(1, tagName);
 
+            ResultSet result = stmt.executeQuery();
+            if (!result.next()) {
+                System.out.println("ei ollut");
+                return false;
+            }
+        }
+        System.out.println("oli");
+        return true;
+    }
+
+    public List<Book> findAllWithTag(String tag) throws SQLException {
+        tag = tag.toLowerCase();
+        List<Book> users = new ArrayList<>();
+        if (!doesTagExist(tag)) {
+            return users;
+        }
+        System.out.println(tag + " löytyi");
         StringBuilder query = new StringBuilder();
         query.append("SELECT * FROM Book\n"
                 + "LEFT JOIN BookTags ON Book.id = BookTags.book_id\n"
                 + "LEFT JOIN Tags ON Tags.tag_id = BookTags.tag_id\n"
-                + "WHERE Tags.tagName = ");
+                + "WHERE Tags.tagName = '");
 
-        tag = tag.toLowerCase();
-        
-        query.append(tag).append(";");
+
+        query.append(tag).append("'");
         try (Connection conn = database.getConnection();
-        PreparedStatement stmt = conn.prepareStatement(query.toString());
-        
+                PreparedStatement stmt = conn.prepareStatement(query.toString());
                 ResultSet result = stmt.executeQuery()) {
 
             while (result.next()) {
                 users.add(new Book(result.getInt("id"), result.getString("title"), result.getString("author"), result.getString("ISBN"), result.getString("tags"), result.getBoolean("seen")));
             }
         }
+        System.out.println("Kirjat haettu tagilla");
         return users;
     }
 
@@ -132,6 +151,7 @@ public class BookDao implements Dao<Book, Integer> {
         try (Connection conn = database.getConnection()) {
             String tagParts[] = tags.split(","); //tänne täytyy vielä lisätä osa joka poistaa vanhoja tageja
             for (String tagPart : tagParts) {
+                tagPart = tagPart.toLowerCase();
                 System.out.println("Lisätään tagi " + tagPart.trim() + " databaseen");
                 PreparedStatement tagCheck = conn.prepareStatement("INSERT OR IGNORE INTO Tags (tagName) VALUES (?)");
                 tagCheck.setString(1, tagPart.trim());

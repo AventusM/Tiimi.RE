@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import ohtu.database.Database;
+import ohtu.domain.Book;
 import ohtu.domain.Video;
 
 public class VideoDao implements Dao<Video, Integer> {
@@ -48,6 +49,50 @@ public class VideoDao implements Dao<Video, Integer> {
         return users;
     }
 
+    
+    public boolean doesTagExist(String tagName) throws SQLException {
+        System.out.println("tutkitaan onko " + tagName + " tietokannassa");
+        try (Connection conn = database.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Tags WHERE tagName = ?");
+            stmt.setString(1, tagName);
+
+            ResultSet result = stmt.executeQuery();
+            if (!result.next()) {
+                System.out.println("ei ollut");
+                return false;
+            }
+        }
+        System.out.println("oli");
+        return true;
+    }
+
+    public List<Video> findAllWithTag(String tag) throws SQLException {
+        tag = tag.toLowerCase();
+        List<Video> users = new ArrayList<>();
+        if (!doesTagExist(tag)) {
+            return users;
+        }
+        System.out.println(tag + " löytyi");
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM Video\n"
+                + "LEFT JOIN VideoTags ON Video.id = VideoTags.video_id\n"
+                + "LEFT JOIN Tags ON Tags.tag_id = VideoTags.tag_id\n"
+                + "WHERE Tags.tagName = '");
+
+//        tag = tag.toLowerCase();
+        query.append(tag).append("'");
+        try (Connection conn = database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query.toString());
+                ResultSet result = stmt.executeQuery()) {
+
+            while (result.next()) {
+                users.add(new Video(result.getString("title"), result.getString("url"), result.getString("tags"), result.getString("comments"), result.getInt("id"), result.getDate("dateAdded"), result.getBoolean("seen")));
+            }
+        }
+        System.out.println("Videot haettu tagilla");
+        return users;
+    }
+    
     @Override
     public Video save(Video video) throws SQLException {
         Video byName = findByName(video.getTitle());
@@ -66,7 +111,7 @@ public class VideoDao implements Dao<Video, Integer> {
             stmt.setBoolean(5, video.getSeen());
             stmt.setDate(6, video.getTime());
             stmt.executeUpdate();
-//            saveOrUpdateTags(video.getTags(), video.getTitle());
+            saveOrUpdateTags(video.getTags(), video.getTitle());
         }
 
         return findByName(video.getTitle());
@@ -88,33 +133,35 @@ public class VideoDao implements Dao<Video, Integer> {
         statement.setBoolean(5, video.getSeen());
         statement.setInt(6, video.getId());
         statement.executeUpdate();
-//        saveOrUpdateTags(video.getTags(), video.getTitle());
+        saveOrUpdateTags(video.getTags(), video.getTitle());
         return findByName(video.getTitle());
     }
 
-//    public void saveOrUpdateTags(String tags, String title) throws SQLException {
-//        if (tags == null || title == null) {
-//            return;
-//        }
-//        int bookId = findByName(title).getId();
-//        try (Connection conn = database.getConnection()) {
-//            String tagParts[] = tags.split(","); //tänne täytyy vielä lisätä osa joka poistaa vanhoja tageja
-//            for (String tagPart : tagParts) {
-//                System.out.println("Lisätään tagi " + tagPart.trim() + " databaseen");
-//                PreparedStatement tagCheck = conn.prepareStatement("INSERT OR IGNORE INTO Tags (tagName) VALUES (?)");
-//                tagCheck.setString(1, tagPart.trim());
-//                tagCheck.executeUpdate();
-//                //Lisätään liitostaulu kirjan ja tagin välille
-//                PreparedStatement tagit = conn.prepareStatement("INSERT INTO BookTags "
-//                        + "(book_id, tag_id) VALUES (?, (SELECT tag_id FROM Tags WHERE tagName = ?))");
-//                tagit.setInt(1, bookId);
-//                tagit.setString(2, tagPart.trim()); // tässä käytetty trim! huom! kannattaa siis tagien haussa myös.
-//                tagit.executeUpdate();
-//                //Liitostaulu lisätty
-//            }
-//        }
-//
-//    }
+    public void saveOrUpdateTags(String tags, String title) throws SQLException {
+        if (tags == null || title == null) {
+            return;
+        }
+        int videoId = findByName(title).getId();
+        try (Connection conn = database.getConnection()) {
+            String tagParts[] = tags.split(","); //tänne täytyy vielä lisätä osa joka poistaa vanhoja tageja
+            for (String tagPart : tagParts) {
+                tagPart = tagPart.toLowerCase();
+                System.out.println("Lisätään tagi " + tagPart.trim() + " databaseen");
+                PreparedStatement tagCheck = conn.prepareStatement("INSERT OR IGNORE INTO Tags (tagName) VALUES (?)");
+                tagCheck.setString(1, tagPart.trim());
+                tagCheck.executeUpdate();
+                //Lisätään liitostaulu kirjan ja tagin välille
+                PreparedStatement tagit = conn.prepareStatement("INSERT INTO VideoTags "
+                        + "(video_id, tag_id) VALUES (?, (SELECT tag_id FROM Tags WHERE tagName = ?))");
+                tagit.setInt(1, videoId);
+                tagit.setString(2, tagPart.trim()); // tässä käytetty trim! huom! kannattaa siis tagien haussa myös.
+                tagit.executeUpdate();
+                //Liitostaulu lisätty
+            }
+        }
+
+    }
+
     public Video findByName(String title) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Video WHERE title = ?");

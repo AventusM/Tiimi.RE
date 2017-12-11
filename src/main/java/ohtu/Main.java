@@ -13,11 +13,10 @@ import spark.Spark;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 public class Main {
-    
+
 //    public static String checkBoxCheck(String checkBoxValue){
 //        
 //    }
-
     public static void main(String[] args) throws Exception {
         // asetetaan portti jos heroku antaa PORT-ympäristömuuttujan
 //        if (System.getenv("PORT") != null) {
@@ -170,25 +169,24 @@ public class Main {
         });
 
         Spark.get("/search", (req, res) -> {
-            
-          
+
             HashMap map = new HashMap<>();
-            System.out.println(req.queryParams("tag"));
-            
-            map.put("videos", videos.findAll());
-            map.put("books", books.findAll());
+            System.out.println("annettu: " + req.queryParams("tag"));
+            String tagi = req.queryParams("tag");
+            if (tagi == null || tagi == "" || tagi == " " || tagi.isEmpty()) {
+                System.out.println("annettu tyhjä tai null");
+                map.put("videos", videos.findAll());
+                map.put("books", books.findAll());
+                System.out.println("mappiin lisätty data");
+            } else {
+                tagi = tagi.toLowerCase();
+                System.out.println(tagi);
+                System.out.println("Lisätään kirjat ja elokuvat");
+                map.put("books", books.findAllWithTag(tagi));
+                map.put("videos", videos.findAllWithTag(tagi));
+            }
 
             return new ModelAndView(map, "search");
         }, new ThymeleafTemplateEngine());
-
-        Spark.get("/searched:tag", (req, res) -> {
-            String tag = (req.params(":tag"));
-            HashMap map = new HashMap<>();
-//            map.put("videos", videos.findAll());
-            map.put("books", books.findAllWithTag(tag)); //sama videolla
-
-            return new ModelAndView(map, "searched");
-        }, new ThymeleafTemplateEngine());
-
     }
 }
