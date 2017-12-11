@@ -4,67 +4,59 @@ import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import ohtu.Dao.BookDao;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
-import org.openqa.selenium.By;
+
+import ohtu.pageobjects.*;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class Stepdefs {
 
     WebDriver driver = new HtmlUnitDriver();
     String baseUrl = "http://localhost:4567/";
+    private HomePage homePage = new HomePage(driver, baseUrl);
+    private BooksPage booksPage = new BooksPage(driver, baseUrl);
+    private BookPage bookPage = new BookPage(driver, baseUrl);
+    private BookEditPage bookEditPage = new BookEditPage(driver, baseUrl);
+    private VideosPage videosPage = new VideosPage(driver, baseUrl);
+    private VideoPage videoPage = new VideoPage(driver, baseUrl);
+    private VideoEditPage videoEditPage = new VideoEditPage(driver, baseUrl);
 
     public Stepdefs() {
-        driver.get(baseUrl);
+        homePage.goToPage();
     }
 
     @Given("^books are selected$")
     public void books_are_selected() throws Throwable {
-        WebElement element = driver.findElement(By.linkText("Books"));
-        element.click();
+        homePage.booksLink().click();
     }
 
     @Given("^videos are selected")
     public void videos_are_selected() throws Throwable {
-        WebElement element = driver.findElement(By.linkText("Videos"));
-        element.click();
+        homePage.videosLink().click();
     }
 
     @When("^author \"([^\"]*)\" and book name \"([^\"]*)\" and ISBN \"([^\"]*)\" are submitted")
     public void author_and_book_name_are_given(String author, String title, String ISBN) throws Throwable {
-        WebElement element = driver.findElement(By.name("author"));
-        element.sendKeys(author);
-        element = driver.findElement(By.name("title"));
-        element.sendKeys(title);
-        element = driver.findElement(By.name("ISBN"));
-        element.sendKeys(ISBN);
-        element = driver.findElement(By.name("submitbook"));
-        element.click();
+        booksPage.authorField().sendKeys(author);
+        booksPage.titleField().sendKeys(title);
+        booksPage.isbnField().sendKeys(ISBN);
+        booksPage.submitButton().click();
     }
 
     @When("^author \"([^\"]*)\" and book name \"([^\"]*)\" and ISBN \"([^\"]*)\" are new values of the book")
     public void author_and_book_name_and_isbn_are_edited(String newAuthor, String newTitle, String newISBN) {
-        WebElement element = driver.findElement(By.name("author"));
-        element.clear();
-        element.sendKeys(newAuthor);
-        element = driver.findElement(By.name("title"));
-        element.clear();
-        element.sendKeys(newTitle);
-        element = driver.findElement(By.name("ISBN"));
-        element.clear();
-        element.sendKeys(newISBN);
-        element = driver.findElement(By.name("send"));
-        element.clear();
-        element.click();
+        bookEditPage.inputAuthor(newAuthor);
+        bookEditPage.inputTitle(newTitle);
+        bookEditPage.inputIsbn(newISBN);
+        bookEditPage.sendButton().click();
     }
 
     @When("^book \"([^\"]*)\" is selected")
     public void book_name_is_selected(String title) {
-        WebElement element = driver.findElement(By.linkText(title));
-        element.click();
+        booksPage.bookLink(title).click();
     }
 
     @Then("^book named \"([^\"]*)\" has been added$")
@@ -85,30 +77,22 @@ public class Stepdefs {
 
     @Given("^new book has been added$")
     public void new_book_by_sipser_has_been_added() throws Throwable {
-        WebElement element = driver.findElement(By.linkText("Books"));
-        element.click();
-        element = driver.findElement(By.name("title"));
-        element.sendKeys("Introduction to the Theory of Computation");
-        element = driver.findElement(By.name("author"));
-        element.sendKeys("Michael Sipser");
-        element = driver.findElement(By.name("ISBN"));
-        element.sendKeys("978-1133187790");
-        element = driver.findElement(By.name("tags"));
-        element.sendKeys("Laskennan mallit");
-        element = driver.findElement(By.name("submitbook"));
-        element.click();
+        homePage.booksLink().click();
+        booksPage.titleField().sendKeys("Introduction to the Theory of Computation");
+        booksPage.authorField().sendKeys("Michael Sipser");
+        booksPage.isbnField().sendKeys("978-1133187790");
+        booksPage.tagsFields().sendKeys("Laskennan mallit");
+        booksPage.submitButton().click();
     }
 
     @When("^edit button is pressed")
     public void book_edit_button_has_been_pressed() {
-        WebElement element = driver.findElement(By.name("editbutton"));
-        element.click();
+        bookPage.editButton().click();
     }
 
     @When("^book is deleted$")
     public void book_is_deleted() throws Throwable {
-        WebElement element = driver.findElement(By.name("poispois"));
-        element.click();
+        bookPage.deleteButton().click();
     }
 
     @Then("^book isn't listed$")
@@ -118,52 +102,37 @@ public class Stepdefs {
 
     @Given("^book has been selected to be edit$")
     public void book_has_been_selected_to_be_edit() throws Throwable {
-        WebElement element = driver.findElement(By.name("bookInstance"));
-        element.click();
-        element = driver.findElement(By.linkText("Edit"));
-        element.click();
+        booksPage.bookInstanceLink().click();
+        bookPage.editButton().click();
     }
 
     @When("^user change title to \"([^\"]*)\"$")
     public void user_change_title_to(String title) throws Throwable {
-        WebElement element = driver.findElement(By.name("title"));
-        element.clear();
-        element.sendKeys(title);
-        element = driver.findElement(By.name("send"));
-        element.click();
+        bookEditPage.inputTitle(title);
+        bookEditPage.sendButton().click();
     }
 
     @When("^user change author to \"([^\"]*)\"$")
     public void user_change_author_to(String author) throws Throwable {
-        WebElement element = driver.findElement(By.name("author"));
-        element.clear();
-        element.sendKeys(author);
-        element = driver.findElement(By.name("send"));
-        element.click();
+        bookEditPage.inputAuthor(author);
+        bookEditPage.sendButton().click();
     }
 
     @When("^user change tags to \"([^\"]*)\"$")
     public void user_change_tags_to(String tags) throws Throwable {
-        WebElement element = driver.findElement(By.name("tags"));
-        element.clear();
-        element.sendKeys(tags);
-        element = driver.findElement(By.name("send"));
-        element.click();
+        bookEditPage.inputTags(tags);
+        bookEditPage.sendButton().click();
     }
 
     @When("^user change ISBN to \"([^\"]*)\"$")
     public void user_change_ISBN_to(String isbn) throws Throwable {
-        WebElement element = driver.findElement(By.name("ISBN"));
-        element.clear();
-        element.sendKeys(isbn);
-        element = driver.findElement(By.name("send"));
-        element.click();
+        bookEditPage.inputIsbn(isbn);
+        bookEditPage.sendButton().click();
     }
 
     @Then("^book data contains \"([^\"]*)\"$")
     public void book_data_contains(String arg1) throws Throwable {
         pageHasContent(arg1);
-
     }
 
     @Then("^book by name \"([^\"]*)\" is not listed anymore$")
@@ -173,12 +142,9 @@ public class Stepdefs {
 
     @When("^title \"([^\"]*)\" and video url \"([^\"]*)\" are submitted$")
     public void title_and_video_url_are_submitted(String title, String url) throws Throwable {
-        WebElement element = driver.findElement(By.name("title"));
-        element.sendKeys(title);
-        element = driver.findElement(By.name("url"));
-        element.sendKeys(url);
-        element = driver.findElement(By.name("submitvideo"));
-        element.click();
+        videosPage.titleField().sendKeys(title);
+        videosPage.urlField().sendKeys(url);
+        videosPage.submitButton().click();
     }
 
     @Then("^video named \"([^\"]*)\" has been added$")
@@ -188,14 +154,12 @@ public class Stepdefs {
 
     @When("^video \"([^\"]*)\" is selected$")
     public void video_is_selected(String videoTitle) throws Throwable {
-        WebElement element = driver.findElement(By.linkText(videoTitle));
-        element.click();
+        videosPage.videoLink(videoTitle).click();
     }
 
     @When("^video is removed$")
     public void video_is_removed() throws Throwable {
-        WebElement element = driver.findElement(By.name("poispois"));
-        element.click();
+        videoPage.deleteButton().click();
     }
 
     @Then("^video by name \"([^\"]*)\" is listed no more$")
@@ -205,10 +169,8 @@ public class Stepdefs {
 
     @When("^new name \"([^\"]*)\" is given to the video$")
     public void new_name_is_given_to_the_video(String title) throws Throwable {
-        WebElement element = driver.findElement(By.name("title"));
-        element.sendKeys(title);
-        element = driver.findElement(By.name("send"));
-        element.click();
+        videoEditPage.inputTitle(title);
+        videoEditPage.sendButton().click();
     }
 
     @Then("^video is named \"([^\"]*)\"$")

@@ -38,7 +38,7 @@ public class BookDao implements Dao<Book, Integer> {
         List<Book> users = new ArrayList<>();
 
         try (Connection conn = database.getConnection();
-                ResultSet result = conn.prepareStatement("SELECT * FROM Book").executeQuery()) {
+                ResultSet result = conn.prepareStatement("SELECT * FROM book").executeQuery()) {
 
             while (result.next()) {
                 users.add(new Book(result.getInt("id"), result.getString("title"), result.getString("author"), result.getString("ISBN"), result.getString("tags"), result.getBoolean("seen")));
