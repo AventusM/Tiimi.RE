@@ -77,7 +77,6 @@ public class BookDao implements Dao<Book, Integer> {
                 + "LEFT JOIN Tags ON Tags.tag_id = BookTags.tag_id\n"
                 + "WHERE Tags.tagName = '");
 
-
         query.append(tag).append("'");
         try (Connection conn = database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query.toString());
@@ -219,6 +218,36 @@ public class BookDao implements Dao<Book, Integer> {
 //        stmt.executeUpdate();
 //        stmt.close();
         connection.close();
+    }
+
+    @Override
+    public List<Book> findread() throws SQLException {
+        List<Book> users = new ArrayList<>();
+
+        try (Connection conn = database.getConnection();
+                ResultSet result = conn.prepareStatement("SELECT * FROM book WHERE seen = 1").executeQuery()) {
+
+            while (result.next()) {
+                users.add(new Book(result.getInt("id"), result.getString("title"), result.getString("author"), result.getString("ISBN"), result.getString("tags"), result.getBoolean("seen")));
+            }
+        }
+
+        return users;
+    }
+
+    @Override
+    public List<Book> findunread() throws SQLException {
+        List<Book> users = new ArrayList<>();
+
+        try (Connection conn = database.getConnection();
+                ResultSet result = conn.prepareStatement("SELECT * FROM book WHERE seen = 0").executeQuery()) {
+
+            while (result.next()) {
+                users.add(new Book(result.getInt("id"), result.getString("title"), result.getString("author"), result.getString("ISBN"), result.getString("tags"), result.getBoolean("seen")));
+            }
+        }
+
+        return users;
     }
 
 }

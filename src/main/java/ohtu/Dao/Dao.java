@@ -2,6 +2,7 @@ package ohtu.Dao;
 
 import java.sql.*;
 import java.util.*;
+import ohtu.domain.Book;
 
 public interface Dao<T, K> {
 
@@ -14,5 +15,10 @@ public interface Dao<T, K> {
     T update(T object) throws SQLException;
 
     void delete(K key) throws SQLException;
+    
+    public List<T> findread()throws SQLException;
+    
+    public List<T> findunread()throws SQLException;
 }
+
 

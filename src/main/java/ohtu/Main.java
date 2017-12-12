@@ -28,6 +28,8 @@ public class Main {
 
         Spark.get("/", (req, res) -> {
             HashMap map = new HashMap<>();
+            map.put("books", books.findAll());
+            map.put("videos", videos.findAll());
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
 
@@ -188,5 +190,22 @@ public class Main {
 
             return new ModelAndView(map, "search");
         }, new ThymeleafTemplateEngine());
+
+        Spark.get("/read", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("books", books.findread());
+            map.put("videos", videos.findread());
+            map.put("read", "Read Bookmarks");
+            return new ModelAndView(map, "index");
+        }, new ThymeleafTemplateEngine());
+
+        Spark.get("/unread", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("books", books.findunread());
+            map.put("videos", videos.findunread());
+            map.put("read", "Unread Bookmarks");
+            return new ModelAndView(map, "index");
+        }, new ThymeleafTemplateEngine());
+
     }
 }

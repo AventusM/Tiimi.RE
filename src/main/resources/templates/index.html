@@ -1,8 +1,8 @@
-<!DOCTYPE html>
-<!--SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">-->
-<!--<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">-->
-<html>
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
     <head>
+
         <title>Tiimi.RE</title> 
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
@@ -14,19 +14,45 @@
             <h1>Tiimi.io</h1>
 
             <ul class="nav">
-                <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="/books">Books</a></li>
                 <li class="nav-item"><a class="nav-link" href="/videos">Videos</a></li>
                 <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
+                <li class="nav-item"><a class="nav-link" href="/unread">Unread bookmarks</a></li>
+                <li class="nav-item"><a class="nav-link" href="/read">Read bookmarks</a></li>
+            </ul>
+            <h1><span th:text="${read}">Read</span></h1>
+
+            <h2>Books:</h2>
+
+            <ul>
+                <li th:each="book : ${books}">
+
+                    <td>
+                        <a th:href="@{~/books/{id}(id=${book.id})}" name="bookInstance">
+                            <span th:text="${book.title}">Title</span>
+                        </a>
+                    </td>
+                </li>
+            </ul>
+
+            <h2>Videos:</h2>
+
+            <ul>
+                <li th:each="video : ${videos}">
+
+                    <td>
+                        <a th:href="@{~/videos/{id}(id=${video.id})}" name="videoInstance">
+                            <span th:text="${video.title}">Title</span>
+                        </a>                        
+                    </td>
+                </li>
             </ul>
 
         </div>
 
-
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-
     </body>
-
 </html>

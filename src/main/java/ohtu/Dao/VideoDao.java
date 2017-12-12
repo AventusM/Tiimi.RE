@@ -49,7 +49,6 @@ public class VideoDao implements Dao<Video, Integer> {
         return users;
     }
 
-    
     public boolean doesTagExist(String tagName) throws SQLException {
         System.out.println("tutkitaan onko " + tagName + " tietokannassa");
         try (Connection conn = database.getConnection()) {
@@ -92,7 +91,7 @@ public class VideoDao implements Dao<Video, Integer> {
         System.out.println("Videot haettu tagilla");
         return users;
     }
-    
+
     @Override
     public Video save(Video video) throws SQLException {
         Video byName = findByName(video.getTitle());
@@ -184,6 +183,36 @@ public class VideoDao implements Dao<Video, Integer> {
             statement.executeUpdate();
             statement.close();
         }
+    }
+
+    @Override
+    public List<Video> findread() throws SQLException {
+        List<Video> users = new ArrayList<>();
+
+        try (Connection conn = database.getConnection();
+                ResultSet result = conn.prepareStatement("SELECT * FROM Video WHERE seen = 1").executeQuery()) {
+
+            while (result.next()) {
+                users.add(new Video(result.getString("title"), result.getString("url"), result.getString("tags"), result.getString("comments"), result.getInt("id"), result.getDate("dateAdded"), result.getBoolean("seen")));
+            }
+        }
+
+        return users;
+    }
+
+    @Override
+    public List<Video> findunread() throws SQLException {
+        List<Video> users = new ArrayList<>();
+
+        try (Connection conn = database.getConnection();
+                ResultSet result = conn.prepareStatement("SELECT * FROM Video WHERE seen = 0").executeQuery()) {
+
+            while (result.next()) {
+                users.add(new Video(result.getString("title"), result.getString("url"), result.getString("tags"), result.getString("comments"), result.getInt("id"), result.getDate("dateAdded"), result.getBoolean("seen")));
+            }
+        }
+
+        return users;
     }
 
 }
