@@ -178,6 +178,19 @@ public class Stepdefs {
         pageHasContent(newTitle);
     }
 
+    @When("^book has been set to read$")
+    public void book_has_been_set_to_read() throws Throwable {
+        if (!bookEditPage.checkBox().isSelected()) {
+            bookEditPage.checkBox().click();
+        }
+        bookEditPage.sendButton().click();
+    }
+
+    @Then("^the book has been read$")
+    public void the_book_has_been_read() throws Throwable {
+        pageHasContent("yes");
+    }
+
     /* helper methods */
     private void pageHasContent(String content) {
         assertTrue(driver.getPageSource().contains(content));

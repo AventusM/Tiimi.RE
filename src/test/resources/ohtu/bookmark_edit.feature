@@ -24,3 +24,10 @@ Feature: user can edit bookmarks
     When user change ISBN to "978-951-98548-9-2"
     Then book data contains "978-951-98548-9-2"
 
+  Scenario: user can set that the book has been read
+    Given books are selected
+    When author "Akira Toriyama" and book name "The Winning Universe is Decided!" and ISBN "978-4-08-880867-3" are submitted
+    And book "The Winning Universe is Decided!" is selected
+    And edit button is pressed
+    And book has been set to read
+    Then the book has been read

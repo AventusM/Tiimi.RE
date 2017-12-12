@@ -46,4 +46,8 @@ public class BookEditPage extends PageObject {
         return driver.findElement(By.name("ISBN"));
     }
 
+    public WebElement checkBox() {
+        return driver.findElement(By.name("box"));
+    }
+
 }

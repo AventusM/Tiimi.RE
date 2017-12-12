@@ -88,6 +88,7 @@ public class Main {
 
             List<String> virheet = books.validateName(book.getTitle());
             if (virheet.isEmpty()) {
+                System.out.println(virheet);
                 books.save(book);
             }
             response.redirect("/books");
@@ -173,7 +174,7 @@ public class Main {
             HashMap map = new HashMap<>();
             System.out.println("annettu: " + req.queryParams("tag"));
             String tagi = req.queryParams("tag");
-            if (tagi == null || tagi == "" || tagi == " " || tagi.isEmpty()) {
+            if (tagi == null || tagi.equalsIgnoreCase("") || tagi.equalsIgnoreCase(" ") || tagi.isEmpty()) {
                 System.out.println("annettu tyhjä tai null");
                 map.put("videos", videos.findAll());
                 map.put("books", books.findAll());
