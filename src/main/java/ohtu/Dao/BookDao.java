@@ -77,7 +77,6 @@ public class BookDao implements Dao<Book, Integer> {
                 + "LEFT JOIN Tags ON Tags.tag_id = BookTags.tag_id\n"
                 + "WHERE Tags.tagName = '");
 
-
         query.append(tag).append("'");
         try (Connection conn = database.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query.toString());

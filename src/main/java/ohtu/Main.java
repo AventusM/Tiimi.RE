@@ -174,7 +174,7 @@ public class Main {
             HashMap map = new HashMap<>();
             System.out.println("annettu: " + req.queryParams("tag"));
             String tagi = req.queryParams("tag");
-            if (tagi == null || tagi.equalsIgnoreCase("") || tagi.equalsIgnoreCase(" ") || tagi.isEmpty()) {
+            if (tagi == null || tagi.trim().equalsIgnoreCase("") || tagi.isEmpty()) {
                 System.out.println("annettu tyhjä tai null");
                 map.put("videos", videos.findAll());
                 map.put("books", books.findAll());
