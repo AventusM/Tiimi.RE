@@ -55,12 +55,35 @@ public class BookDao implements Dao<Book, Integer> {
         return users;
     }
 
-    public boolean doesTagExist(String tagName) throws SQLException {
-        System.out.println("tutkitaan onko " + tagName + " tietokannassa");
+//    public boolean doesTagExist(String tagName) throws SQLException {
+//        System.out.println("tutkitaan onko " + tagName + " tietokannassa");
+//        try (Connection conn = database.getConnection()) {
+//            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Tags WHERE tagName = ?");
+//            stmt.setString(1, tagName);
+//
+//            ResultSet result = stmt.executeQuery();
+//            if (!result.next()) {
+//                System.out.println("ei ollut");
+//                return false;
+//            }
+//        }
+//        System.out.println("oli");
+//        return true;
+//    }
+    
+        public boolean existsInDatabase(String name, String searchType) throws SQLException {
+        System.out.println("tutkitaan onko " + name + " tietokannassa");
         try (Connection conn = database.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Tags WHERE tagName = ?");
-            stmt.setString(1, tagName);
-
+            PreparedStatement stmt = null;
+            if (searchType == "booktitle") {
+                stmt = conn.prepareStatement("SELECT * FROM Book WHERE title LIKE ?");
+                stmt.setString(1, "%" + name + "%");
+            } else if (searchType == "tags") {
+                stmt = conn.prepareStatement("SELECT * FROM Tags WHERE tagName = ?");
+                stmt.setString(1, name);
+            } else {
+                throw new IllegalArgumentException("a searchtype was used that is not supported by method"); 
+            }
             ResultSet result = stmt.executeQuery();
             if (!result.next()) {
                 System.out.println("ei ollut");
@@ -71,10 +94,33 @@ public class BookDao implements Dao<Book, Integer> {
         return true;
     }
 
+        public List<Book> findAllWithTitle(String title) throws SQLException {
+        title = title.toLowerCase();
+        List<Book> users = new ArrayList<>();
+        if (!existsInDatabase(title, "booktitle")) {
+            return users;
+        }
+        System.out.println(title + " löytyi");
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM Book WHERE title LIKE '%");
+
+        query.append(title).append("%'");
+        try (Connection conn = database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query.toString());
+                ResultSet result = stmt.executeQuery()) {
+
+            while (result.next()) {
+                users.add(new Book(result.getInt("id"), result.getString("title"), result.getString("author"), result.getString("ISBN"), result.getString("tags"), result.getBoolean("seen")));
+            }
+        }
+        System.out.println("Kirjat haettu titlellä");
+        return users;
+    }
+    
     public List<Book> findAllWithTag(String tag) throws SQLException {
         tag = tag.toLowerCase();
         List<Book> users = new ArrayList<>();
-        if (!doesTagExist(tag)) {
+        if (!existsInDatabase(tag, "tags")) {
             return users;
         }
         System.out.println(tag + " löytyi");
