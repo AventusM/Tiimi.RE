@@ -26,8 +26,8 @@ Feature: user can edit bookmarks
 
   Scenario: user can set that the book has been read
     Given books are selected
-    When author "Akira Toriyama" and book name "The Winning Universe is Decided!" and ISBN "978-4-08-880867-3" are submitted
-    And book "The Winning Universe is Decided!" is selected
+    When author "Akira Toriyama" and book name "Uusin animekirja" and ISBN "978-4-08-880867-3" are submitted
+    And book "Uusin animekirja" is selected
     And edit button is pressed
     And book has been set to read
     Then the book has been read

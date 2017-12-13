@@ -201,13 +201,6 @@ public class Stepdefs {
         searchPage.goToPage();
     }
 
-    @When("^search is performed by keyword \"([^\"]*)\"$")
-    public void search_is_performed_by_keyword(String tags) throws Throwable {
-        System.out.println(searchPage);
-        searchPage.tagSearchField().sendKeys(tags);
-        searchPage.tagSearchButton().click();
-    }
-
     @Then("^query returns book by name \"([^\"]*)\"$")
     public void query_returns_book_by_name(String bookTitle) throws Throwable {
         pageHasContent(bookTitle);
@@ -219,9 +212,6 @@ public class Stepdefs {
         //Jos kirja on jostain syystä luettu aikaisemmin, niin poistetaan muutos
         //Esim aiempi testi saattoi aiheuttaa tämän -> ratkaisuna ehkä tietokannan
         //clearaus ennen jokaista testiä?
-        if (bookPage.markAsUnreadButton().isDisplayed()) {
-            bookPage.markAsUnreadButton().click();
-        }
         bookPage.markAsReadButton().click();
     }
 
@@ -251,9 +241,6 @@ public class Stepdefs {
     @When("^the video has been set to viewed on its own page$")
     public void the_video_has_been_set_to_viewed_on_its_own_page() throws Throwable {
         Thread.sleep(1000);
-        if (videoPage.markAsUnWatchedButton().isDisplayed()) {
-            videoPage.markAsUnWatchedButton().click();
-        }
         videoPage.markAsWatchedButton().click();
     }
 
@@ -261,6 +248,29 @@ public class Stepdefs {
     public void viewing_all_viewed_videos_shows_that_the_video_by_name_has_been_viewed(String videoTitle) throws Throwable {
         readBookMarksPage.goToPage();
         pageHasContent(videoTitle);
+    }
+
+    @When("^search is performed by keyword \"([^\"]*)\"$")
+    public void search_is_performed_by_keyword(String tags) throws Throwable {
+        searchPage.goToPage();
+        searchPage.inputSearchField(tags);
+        searchPage.tagSearchButton().click();
+    }
+
+    @When("^search is performed by title \"([^\"]*)\"$")
+    public void search_is_performed_by_title(String title) throws Throwable {
+        searchPage.goToPage();
+        searchPage.inputSearchField(title);
+        searchPage.titleSearchButton().click();
+    }
+
+    @When("^author \"([^\"]*)\" and book name \"([^\"]*)\" and ISBN \"([^\"]*)\" and tags \"([^\"]*)\" have been submitted$")
+    public void author_and_book_name_and_ISBN_and_tags_have_been_submitted(String author, String title, String ISBN, String tags) throws Throwable {
+        booksPage.authorField().sendKeys(author);
+        booksPage.titleField().sendKeys(title);
+        booksPage.isbnField().sendKeys(ISBN);
+        booksPage.tagsFields().sendKeys(tags);
+        booksPage.submitButton().click();
     }
 
 

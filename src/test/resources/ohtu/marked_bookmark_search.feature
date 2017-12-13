@@ -15,6 +15,6 @@ Feature: user can search for read / unread books or videos
   Scenario: user searches for a seen video
     Given videos are selected
     When title "Cat video #90001" and video url "https://www.youtube.com/watch?v=XyNlqQId-nk" are submitted
-    And video by title "Cat video #9001" is selected
+    And video by title "Cat video #90001" is selected
     And the video has been set to viewed on its own page
-    Then viewing all viewed videos shows that the video by name "Cat video #9001" has been viewed
+    Then viewing all viewed videos shows that the video by name "Cat video #90001" has been viewed

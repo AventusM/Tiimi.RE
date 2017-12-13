@@ -14,15 +14,19 @@ public class SearchPage extends PageObject {
         driver.get(baseUrl + "search");
     }
 
-    public void inputTagSearchField(String tags) {
-        clearFieldAndInput(tagSearchField(), tags);
+    public void inputSearchField(String input) {
+        clearFieldAndInput(SearchField(), input);
     }
 
     public WebElement tagSearchButton() {
         return driver.findElement(By.name("tagsearchbutton"));
     }
 
-    public WebElement tagSearchField() {
+    public WebElement titleSearchButton() {
+        return driver.findElement(By.name("titlesearchbutton"));
+    }
+
+    public WebElement SearchField() {
         return driver.findElement(By.name("tagsearch"));
     }
 

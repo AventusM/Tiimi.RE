@@ -7,5 +7,5 @@ Feature: user can add and browse (book)marks
 
   Scenario: user can add a video
     Given videos are selected
-    When title "Cat video #1" and video url "goo.gl/WIEH6J" are submitted
-    Then video named "Cat video #1" has been added
+    When title "Cat video #123" and video url "goo.gl/WIEH6J" are submitted
+    Then video named "Cat video #123" has been added
