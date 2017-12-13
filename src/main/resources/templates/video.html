@@ -50,8 +50,8 @@
                         <th>Watched:</th>
                         <td><span>yes</span></td>
                         <td>
-                            <form method="post" th:action="@{~/videos/{id}/unread(id=${video.id})}">                            
-                                <input type="submit" name="unread" value="Mark as unread"/>
+                            <form method="post" th:action="@{~/videos/{id}/unwatched(id=${video.id})}">                            
+                                <input type="submit" name="unwatched" value="Mark as unwatched"/>
                             </form>
                         </td>
                     </tr>
@@ -59,8 +59,8 @@
                         <th>Watched:</th>
                         <td><span>no</span></td>
                         <td>
-                            <form method="post" th:action="@{~/videos/{id}/read(id=${video.id})}">                            
-                                <input type="submit" name="read" value="Mark as read"/>
+                            <form method="post" th:action="@{~/videos/{id}/watched(id=${video.id})}">                            
+                                <input type="submit" name="watched" value="Mark as watched"/>
                             </form>
                         </td>
                     </tr>

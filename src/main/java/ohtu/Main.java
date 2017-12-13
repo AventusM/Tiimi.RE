@@ -226,7 +226,7 @@ public class Main {
             return "";
         });
 
-        Spark.post("/videos/:id/read", (request, response) -> {
+        Spark.post("/videos/:id/watched", (request, response) -> {
             Integer id = Integer.parseInt(request.params(":id"));
 
             videos.markAsRead(id, 1); //seen -> 1
@@ -235,7 +235,7 @@ public class Main {
             return "";
         });
 
-        Spark.post("/videos/:id/unread", (request, response) -> {
+        Spark.post("/videos/:id/unwatched", (request, response) -> {
             Integer id = Integer.parseInt(request.params(":id"));
 
             videos.markAsRead(id, 0); //seen -> 0
