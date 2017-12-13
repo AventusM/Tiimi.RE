@@ -175,25 +175,30 @@ public class Main {
             System.out.println("tulostetaan " + req.queryParams("tagsearchbutton"));
             HashMap map = new HashMap<>();
             System.out.println("annettu: " + req.queryParams("tagsearch"));
-            String tagi = req.queryParams("tagsearch");
-            if (tagi == null || tagi.trim().equalsIgnoreCase("") || tagi.isEmpty()) {
+            String searchterm = req.queryParams("tagsearch");
+            if (searchterm == null || searchterm.trim().equalsIgnoreCase("") || searchterm.isEmpty()) {
                 System.out.println("annettu tyhjä tai null");
                 map.put("videos", videos.findAll());
                 map.put("books", books.findAll());
                 System.out.println("mappiin lisätty data");
             } else {
-                tagi = tagi.toLowerCase();
-                System.out.println(tagi);
-                String painettuNappi = req.queryParams("tagsearchbutton");
+                searchterm = searchterm.toLowerCase();
+                System.out.println(searchterm);
+                String painettuNappi;
+                if (req.queryParams("tagsearchbutton") == null) {
+                    painettuNappi = req.queryParams("titlesearchbutton");
+                } else {
+                    painettuNappi = req.queryParams("tagsearchbutton");
+                }
                 System.out.println("painettu nappi on " + painettuNappi);
                 System.out.println("Lisätään kirjat ja elokuvat");
                 if (painettuNappi.contains("tag")) {
-                    map.put("books", books.findAllWithTag(tagi));
-                    map.put("videos", videos.findAllWithTag(tagi));
+                    map.put("books", books.findAllWithTag(searchterm));
+                    map.put("videos", videos.findAllWithTag(searchterm));
                 } else if (painettuNappi.contains("title")) {
                     System.out.println("haetaan titlellä");
-                    map.put("books", books.findAllWithTitle(tagi));
-                    map.put("videos", videos.findAllWithTitle(tagi));
+                    map.put("books", books.findAllWithTitle(searchterm));
+                    map.put("videos", videos.findAllWithTitle(searchterm));
                 }
 
             }

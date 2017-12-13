@@ -49,21 +49,6 @@ public class VideoDao implements Dao<Video, Integer> {
         return users;
     }
 
-//    public boolean doesTagExist(String tagName) throws SQLException {
-//        System.out.println("tutkitaan onko " + tagName + " tietokannassa");
-//        try (Connection conn = database.getConnection()) {
-//            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Tags WHERE tagName = ?");
-//            stmt.setString(1, tagName);
-//
-//            ResultSet result = stmt.executeQuery();
-//            if (!result.next()) {
-//                System.out.println("ei ollut");
-//                return false;
-//            }
-//        }
-//        System.out.println("oli");
-//        return true;
-//    }
     
     public boolean existsInDatabase(String name, String searchType) throws SQLException {
         System.out.println("tutkitaan onko " + name + " tietokannassa");
