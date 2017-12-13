@@ -208,7 +208,7 @@ public class Stepdefs {
 
     @When("^the book has been marked read on its own page$")
     public void the_book_has_been_marked_read_on_its_own_page() throws Throwable {
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         //Jos kirja on jostain syystä luettu aikaisemmin, niin poistetaan muutos
         //Esim aiempi testi saattoi aiheuttaa tämän -> ratkaisuna ehkä tietokannan
         //clearaus ennen jokaista testiä?
@@ -223,7 +223,7 @@ public class Stepdefs {
 
     @When("^book by name \"([^\"]*)\" is selected$")
     public void book_by_name_is_selected(String bookTitle) throws Throwable {
-        Thread.sleep(2000);
+        Thread.sleep(1000);
         booksPage.bookLink(bookTitle).click();
     }
 

@@ -15,7 +15,7 @@ import spark.template.thymeleaf.ThymeleafTemplateEngine;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-
+        
         Database database = new Database("jdbc:sqlite:tietokanta.db");
         BookDao books = new BookDao(database);
         VideoDao videos = new VideoDao(database);
