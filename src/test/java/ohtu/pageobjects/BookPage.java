@@ -11,11 +11,19 @@ public class BookPage extends PageObject {
     }
 
     public WebElement editButton() {
-        return  driver.findElement(By.name("editbutton"));
+        return driver.findElement(By.name("editbutton"));
     }
 
     public WebElement deleteButton() {
         return driver.findElement(By.name("poispois"));
+    }
+
+    public WebElement markAsReadButton() {
+        return driver.findElement(By.name("read"));
+    }
+
+    public WebElement markAsUnreadButton() {
+        return driver.findElement(By.name("unread"));
     }
 
     public void goToPage(long id) {

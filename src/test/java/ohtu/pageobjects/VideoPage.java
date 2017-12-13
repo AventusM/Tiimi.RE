@@ -14,4 +14,12 @@ public class VideoPage extends PageObject {
         return driver.findElement(By.name("poispois"));
     }
 
+    public WebElement markAsWatchedButton() {
+        return driver.findElement(By.name("watched"));
+    }
+
+    public WebElement markAsUnWatchedButton() {
+        return driver.findElement(By.name("unwatched"));
+    }
+
 }

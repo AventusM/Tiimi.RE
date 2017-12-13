@@ -4,6 +4,7 @@ import cucumber.api.java.After;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import static java.lang.Thread.sleep;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
@@ -24,6 +25,8 @@ public class Stepdefs {
     private VideoPage videoPage = new VideoPage(driver, baseUrl);
     private VideoEditPage videoEditPage = new VideoEditPage(driver, baseUrl);
     private SearchPage searchPage = new SearchPage(driver, baseUrl);
+    private ReadBookMarksPage readBookMarksPage = new ReadBookMarksPage(driver, baseUrl);
+    private UnReadBookMarksPage unReadBookMarksPage = new UnReadBookMarksPage(driver, baseUrl);
 
     public Stepdefs() {
         homePage.goToPage();
@@ -56,7 +59,8 @@ public class Stepdefs {
     }
 
     @When("^book \"([^\"]*)\" is selected")
-    public void book_name_is_selected(String title) {
+    public void book_name_is_selected(String title) throws InterruptedException {
+        Thread.sleep(1000);
         booksPage.bookLink(title).click();
     }
 
@@ -207,6 +211,56 @@ public class Stepdefs {
     @Then("^query returns book by name \"([^\"]*)\"$")
     public void query_returns_book_by_name(String bookTitle) throws Throwable {
         pageHasContent(bookTitle);
+    }
+
+    @When("^the book has been marked read on its own page$")
+    public void the_book_has_been_marked_read_on_its_own_page() throws Throwable {
+        Thread.sleep(2000);
+        //Jos kirja on jostain syystä luettu aikaisemmin, niin poistetaan muutos
+        //Esim aiempi testi saattoi aiheuttaa tämän -> ratkaisuna ehkä tietokannan
+        //clearaus ennen jokaista testiä?
+        if (bookPage.markAsUnreadButton().isDisplayed()) {
+            bookPage.markAsUnreadButton().click();
+        }
+        bookPage.markAsReadButton().click();
+    }
+
+    @Then("^viewing all read books shows that the book by name \"([^\"]*)\" has been read$")
+    public void viewing_all_read_books_shows_that_the_book_by_name_has_been_read(String title) throws Throwable {
+        readBookMarksPage.goToPage();
+        pageHasContent(title);
+    }
+
+    @When("^book by name \"([^\"]*)\" is selected$")
+    public void book_by_name_is_selected(String bookTitle) throws Throwable {
+        Thread.sleep(2000);
+        booksPage.bookLink(bookTitle).click();
+    }
+
+    @Then("^viewing all unread books shows that the book by name \"([^\"]*)\" has not been read$")
+    public void viewing_all_unread_books_shows_that_the_book_by_name_has_not_been_read(String bookTitle) throws Throwable {
+        unReadBookMarksPage.goToPage();
+        pageHasContent(bookTitle);
+    }
+
+    @When("^video by title \"([^\"]*)\" is selected$")
+    public void video_by_title_is_selected(String videoTitle) throws Throwable {
+        videosPage.videoLink(videoTitle).click();
+    }
+
+    @When("^the video has been set to viewed on its own page$")
+    public void the_video_has_been_set_to_viewed_on_its_own_page() throws Throwable {
+        Thread.sleep(1000);
+        if (videoPage.markAsUnWatchedButton().isDisplayed()) {
+            videoPage.markAsUnWatchedButton().click();
+        }
+        videoPage.markAsWatchedButton().click();
+    }
+
+    @Then("^viewing all viewed videos shows that the video by name \"([^\"]*)\" has been viewed$")
+    public void viewing_all_viewed_videos_shows_that_the_video_by_name_has_been_viewed(String videoTitle) throws Throwable {
+        readBookMarksPage.goToPage();
+        pageHasContent(videoTitle);
     }
 
 

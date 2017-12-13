@@ -7,3 +7,4 @@ Feature: user can search for pre-existing bookmarks
     And search is selected
     And search is performed by keyword "anime"
     Then query returns book by name "The Winning Universe is Decided!"
+
