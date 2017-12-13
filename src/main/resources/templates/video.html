@@ -20,7 +20,7 @@
                 <li class="nav-item"><a class="nav-link" href="/unread">Unread bookmarks</a></li>
                 <li class="nav-item"><a class="nav-link" href="/read">Read bookmarks</a></li>
             </ul>
-            
+
             <h1 th:text="${video.title}">Name of the book</h1>
 
             <table style="table">
@@ -49,10 +49,20 @@
                     <tr th:if="${video.seen} == true">
                         <th>Watched:</th>
                         <td><span>yes</span></td>
+                        <td>
+                            <form method="post" th:action="@{~/videos/{id}/unread(id=${video.id})}">                            
+                                <input type="submit" name="unread" value="Mark as unread"/>
+                            </form>
+                        </td>
                     </tr>
                     <tr th:if="${video.seen} != true">
                         <th>Watched:</th>
                         <td><span>no</span></td>
+                        <td>
+                            <form method="post" th:action="@{~/videos/{id}/read(id=${video.id})}">                            
+                                <input type="submit" name="read" value="Mark as read"/>
+                            </form>
+                        </td>
                     </tr>
                 </tbody>
             </table>

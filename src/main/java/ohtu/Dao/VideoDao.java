@@ -215,4 +215,15 @@ public class VideoDao implements Dao<Video, Integer> {
         return users;
     }
 
+    @Override
+    public void markAsRead(Integer id, int watched) throws SQLException {
+        Video video = findOne(id);
+        Connection connection = database.getConnection();
+        PreparedStatement statement = connection.prepareStatement(
+                "UPDATE Video SET seen = ? WHERE id = ?");
+        statement.setInt(1, watched);
+        statement.setInt(2, video.getId());
+        statement.executeUpdate();
+    }
+
 }

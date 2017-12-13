@@ -21,7 +21,7 @@
                 <li class="nav-item"><a class="nav-link" href="/unread">Unread bookmarks</a></li>
                 <li class="nav-item"><a class="nav-link" href="/read">Read bookmarks</a></li>
             </ul>
-            
+
             <h1 th:text="${book.title}">Name of the book</h1>
 
             <table style="table">
@@ -50,10 +50,22 @@
                     <tr th:if="${book.seen} == true">
                         <th>Read:</th>
                         <td><span>yes</span></td>
+                        <td>
+                            <form method="post" th:action="@{~/books/{id}/unread(id=${book.id})}">                            
+                                <input type="submit" name="unread" value="Mark as unread"/>
+                            </form>
+                        </td>
+
                     </tr>
                     <tr th:if="${book.seen} != true">
                         <th>Read:</th>
                         <td><span>no</span></td>
+                        <td>
+                            <form method="post" th:action="@{~/books/{id}/read(id=${book.id})}">                            
+                                <input type="submit" name="read" value="Mark as read"/>
+                            </form>
+                        </td>
+
                     </tr>
                 </tbody>
             </table>

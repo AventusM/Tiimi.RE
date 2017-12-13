@@ -28,12 +28,12 @@ public class BookDao implements Dao<Book, Integer> {
                 return null;
             }
             Book b = new Book(
-                    result.getInt("id"), 
-                    result.getString("title"), 
-                    result.getString("author"), 
-                    result.getString("ISBN"), 
-                    result.getString("tags"), 
-                    result.getBoolean("seen"), 
+                    result.getInt("id"),
+                    result.getString("title"),
+                    result.getString("author"),
+                    result.getString("ISBN"),
+                    result.getString("tags"),
+                    result.getBoolean("seen"),
                     result.getDate("dateAdded"));
             return b;
 
@@ -255,6 +255,17 @@ public class BookDao implements Dao<Book, Integer> {
         }
 
         return users;
+    }
+    
+    @Override
+    public void markAsRead(Integer id, int read) throws SQLException {
+        Book book = findOne(id);
+        Connection connection = database.getConnection();
+        PreparedStatement statement = connection.prepareStatement(
+                "UPDATE Book SET seen = ? WHERE id = ?");
+        statement.setInt(1, read);
+        statement.setInt(2, book.getId());
+        statement.executeUpdate();
     }
 
 }

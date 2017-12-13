@@ -11,14 +11,14 @@ public interface Dao<T, K> {
     List<T> findAll() throws SQLException;
 
     T save(T object) throws SQLException;
-    
+
     T update(T object) throws SQLException;
 
     void delete(K key) throws SQLException;
-    
-    public List<T> findread()throws SQLException;
-    
-    public List<T> findunread()throws SQLException;
+
+    List<T> findread() throws SQLException;
+
+    List<T> findunread() throws SQLException;
+
+    void markAsRead(K key, int type) throws SQLException;
 }
-
-

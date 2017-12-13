@@ -208,5 +208,40 @@ public class Main {
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
 
+        Spark.post("/books/:id/read", (request, response) -> {
+            Integer id = Integer.parseInt(request.params(":id"));
+
+            books.markAsRead(id, 1); //seen -> 1
+
+            response.redirect("/books/" + id);
+            return "";
+        });
+
+        Spark.post("/books/:id/unread", (request, response) -> {
+            Integer id = Integer.parseInt(request.params(":id"));
+
+            books.markAsRead(id, 0); //seen -> 0
+
+            response.redirect("/books/" + id);
+            return "";
+        });
+
+        Spark.post("/videos/:id/read", (request, response) -> {
+            Integer id = Integer.parseInt(request.params(":id"));
+
+            videos.markAsRead(id, 1); //seen -> 1
+
+            response.redirect("/videos/" + id);
+            return "";
+        });
+
+        Spark.post("/videos/:id/unread", (request, response) -> {
+            Integer id = Integer.parseInt(request.params(":id"));
+
+            videos.markAsRead(id, 0); //seen -> 0
+
+            response.redirect("/videos/" + id);
+            return "";
+        });
     }
 }
