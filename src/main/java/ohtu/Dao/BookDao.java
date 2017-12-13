@@ -205,29 +205,29 @@ public class BookDao implements Dao<Book, Integer> {
 
     }
 
-    public String findTagsAndReturnAsCommaSeparatedString(int id) throws SQLException {
-        try (Connection conn = database.getConnection()) {
-            PreparedStatement tagit = conn.prepareStatement("SELECT tagName FROM Tags"
-                    + "LEFT JOIN BookTags ON Tags.tag_id = BookTags.tag_id"
-                    + "LEFT JOIN Book ON BookTags.book_id = Book.id"
-                    + "WHERE Book.id = ?");
-
-            tagit.setInt(1, id);
-            ResultSet tagsResult = tagit.executeQuery();
-            if (!tagsResult.next()) {
-                return null;
-            }
-            StringBuilder builder = new StringBuilder();
-            while (tagsResult.next()) {
-                builder.append(tagsResult.getString("tagName"));
-                if (!tagsResult.isLast()) {
-                    builder.append(", ");
-                }
-            }
-            String tagsToReturn = builder.toString();
-            return tagsToReturn;
-        }
-    }
+//    public String findTagsAndReturnAsCommaSeparatedString(int id) throws SQLException {
+//        try (Connection conn = database.getConnection()) {
+//            PreparedStatement tagit = conn.prepareStatement("SELECT tagName FROM Tags"
+//                    + "LEFT JOIN BookTags ON Tags.tag_id = BookTags.tag_id"
+//                    + "LEFT JOIN Book ON BookTags.book_id = Book.id"
+//                    + "WHERE Book.id = ?");
+//
+//            tagit.setInt(1, id);
+//            ResultSet tagsResult = tagit.executeQuery();
+//            if (!tagsResult.next()) {
+//                return null;
+//            }
+//            StringBuilder builder = new StringBuilder();
+//            while (tagsResult.next()) {
+//                builder.append(tagsResult.getString("tagName"));
+//                if (!tagsResult.isLast()) {
+//                    builder.append(", ");
+//                }
+//            }
+//            String tagsToReturn = builder.toString();
+//            return tagsToReturn;
+//        }
+//    }
 
     public Book findByName(String title) throws SQLException {
         try (Connection conn = database.getConnection()) {

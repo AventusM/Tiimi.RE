@@ -14,14 +14,8 @@ import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
 public class Main {
 
-//    public static String checkBoxCheck(String checkBoxValue){
-//        
-//    }
     public static void main(String[] args) throws Exception {
-        // asetetaan portti jos heroku antaa PORT-ympäristömuuttujan
-//        if (System.getenv("PORT") != null) {
-//            port(Integer.valueOf(System.getenv("PORT")));
-//        }
+
         Database database = new Database("jdbc:sqlite:tietokanta.db");
         BookDao books = new BookDao(database);
         VideoDao videos = new VideoDao(database);
@@ -77,7 +71,7 @@ public class Main {
             response.redirect("/books/" + id);
             //Returniin voisi laittaa saadut virhetilanteet?
             //Alkeellinen toString() - testiversio alustavasti mukana
-            return virheet.toString();
+            return "";
         });
 
         Spark.post("/books", (request, response) -> {
