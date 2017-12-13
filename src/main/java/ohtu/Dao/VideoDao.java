@@ -49,12 +49,35 @@ public class VideoDao implements Dao<Video, Integer> {
         return users;
     }
 
-    public boolean doesTagExist(String tagName) throws SQLException {
-        System.out.println("tutkitaan onko " + tagName + " tietokannassa");
+//    public boolean doesTagExist(String tagName) throws SQLException {
+//        System.out.println("tutkitaan onko " + tagName + " tietokannassa");
+//        try (Connection conn = database.getConnection()) {
+//            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Tags WHERE tagName = ?");
+//            stmt.setString(1, tagName);
+//
+//            ResultSet result = stmt.executeQuery();
+//            if (!result.next()) {
+//                System.out.println("ei ollut");
+//                return false;
+//            }
+//        }
+//        System.out.println("oli");
+//        return true;
+//    }
+    
+    public boolean existsInDatabase(String name, String searchType) throws SQLException {
+        System.out.println("tutkitaan onko " + name + " tietokannassa");
         try (Connection conn = database.getConnection()) {
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Tags WHERE tagName = ?");
-            stmt.setString(1, tagName);
-
+            PreparedStatement stmt = null;
+            if (searchType == "videotitle") {
+                stmt = conn.prepareStatement("SELECT * FROM Video WHERE title LIKE ?");
+                stmt.setString(1, "%" + name + "%");
+            } else if (searchType == "tags") {
+                stmt = conn.prepareStatement("SELECT * FROM Tags WHERE tagName = ?");
+                stmt.setString(1, name);
+            } else {
+                throw new IllegalArgumentException("a searchtype was used that is not supported by method"); 
+            }
             ResultSet result = stmt.executeQuery();
             if (!result.next()) {
                 System.out.println("ei ollut");
@@ -65,10 +88,33 @@ public class VideoDao implements Dao<Video, Integer> {
         return true;
     }
 
+    public List<Video> findAllWithTitle(String title) throws SQLException {
+        title = title.toLowerCase();
+        List<Video> users = new ArrayList<>();
+        if (!existsInDatabase(title, "videotitle")) {
+            return users;
+        }
+        System.out.println(title + " löytyi");
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM Video WHERE title LIKE '%");
+
+        query.append(title).append("%'");
+        try (Connection conn = database.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query.toString());
+                ResultSet result = stmt.executeQuery()) {
+
+            while (result.next()) {
+                users.add(new Video(result.getString("title"), result.getString("url"), result.getString("tags"), result.getString("comments"), result.getInt("id"), result.getDate("dateAdded"), result.getBoolean("seen")));
+            }
+        }
+        System.out.println("Videot haettu titlellä");
+        return users;
+    }
+
     public List<Video> findAllWithTag(String tag) throws SQLException {
         tag = tag.toLowerCase();
         List<Video> users = new ArrayList<>();
-        if (!doesTagExist(tag)) {
+        if (!existsInDatabase(tag, "tags")) {
             return users;
         }
         System.out.println(tag + " löytyi");
