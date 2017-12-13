@@ -199,7 +199,8 @@ public class Stepdefs {
 
     @When("^search is performed by keyword \"([^\"]*)\"$")
     public void search_is_performed_by_keyword(String tags) throws Throwable {
-        searchPage.inputTagSearchField(tags);
+        System.out.println(searchPage);
+        searchPage.tagSearchField().sendKeys(tags);
         searchPage.tagSearchButton().click();
     }
 

@@ -11,7 +11,7 @@ public class SearchPage extends PageObject {
     }
 
     public void goToPage() {
-        driver.get(baseUrl + "search/");
+        driver.get(baseUrl + "search");
     }
 
     public void inputTagSearchField(String tags) {
@@ -23,7 +23,7 @@ public class SearchPage extends PageObject {
     }
 
     public WebElement tagSearchField() {
-        return driver.findElement(By.name("tagsearchfield"));
+        return driver.findElement(By.name("tagsearch"));
     }
 
 }
