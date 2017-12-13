@@ -23,6 +23,7 @@ public class Stepdefs {
     private VideosPage videosPage = new VideosPage(driver, baseUrl);
     private VideoPage videoPage = new VideoPage(driver, baseUrl);
     private VideoEditPage videoEditPage = new VideoEditPage(driver, baseUrl);
+    private SearchPage searchPage = new SearchPage(driver, baseUrl);
 
     public Stepdefs() {
         homePage.goToPage();
@@ -177,6 +178,36 @@ public class Stepdefs {
     public void video_is_named(String newTitle) throws Throwable {
         pageHasContent(newTitle);
     }
+
+    @When("^book has been set to read$")
+    public void book_has_been_set_to_read() throws Throwable {
+        if (!bookEditPage.checkBox().isSelected()) {
+            bookEditPage.checkBox().click();
+        }
+        bookEditPage.sendButton().click();
+    }
+
+    @Then("^the book has been read$")
+    public void the_book_has_been_read() throws Throwable {
+        pageHasContent("yes");
+    }
+
+    @When("^search is selected$")
+    public void search_is_selected() throws Throwable {
+        searchPage.goToPage();
+    }
+
+    @When("^search is performed by keyword \"([^\"]*)\"$")
+    public void search_is_performed_by_keyword(String tags) throws Throwable {
+        searchPage.inputTagSearchField(tags);
+        searchPage.tagSearchButton().click();
+    }
+
+    @Then("^query returns book by name \"([^\"]*)\"$")
+    public void query_returns_book_by_name(String bookTitle) throws Throwable {
+        pageHasContent(bookTitle);
+    }
+
 
     /* helper methods */
     private void pageHasContent(String content) {
