@@ -12,6 +12,13 @@ import spark.Spark;
 //import static spark.Spark.port;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
 
+/**
+ * Tiimi.RE is a program that helps a user collect and search bookmarked books and videos
+ * The main method contains all the calls to our different html pages and attaches these to
+ * all the backend methods that exist in the program.
+ * 
+ * @author Tiimi.RE
+ */
 public class Main {
 
     public static void main(String[] args) throws Exception {

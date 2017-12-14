@@ -9,6 +9,11 @@ import java.util.List;
 import ohtu.database.Database;
 import ohtu.domain.Book;
 
+/**
+ * BookDao contains all the backend methods that revolve around Books
+ * 
+ * @author Tiime.RE
+ */
 public class BookDao implements Dao<Book, Integer> {
 
     private Database database;
@@ -17,6 +22,13 @@ public class BookDao implements Dao<Book, Integer> {
         this.database = database;
     }
 
+    /**
+     * Searches the database for a single item from the Book table
+     *
+     * @param key
+     * @return
+     * @throws SQLException
+     */
     @Override
     public Book findOne(Integer key) throws SQLException {
         try (Connection conn = database.getConnection()) {
@@ -40,6 +52,12 @@ public class BookDao implements Dao<Book, Integer> {
         }
     }
 
+    /**
+     * Finds and returns all the items from the Book table
+     *
+     * @return
+     * @throws SQLException
+     */
     @Override
     public List<Book> findAll() throws SQLException {
         List<Book> users = new ArrayList<>();
@@ -55,8 +73,15 @@ public class BookDao implements Dao<Book, Integer> {
         return users;
     }
 
-    
-        public boolean existsInDatabase(String name, String searchType) throws SQLException {
+/**
+ * Checks whether an entry exists in the database
+ * 
+ * @param name
+ * @param searchType
+ * @return
+ * @throws SQLException 
+ */
+    public boolean existsInDatabase(String name, String searchType) throws SQLException {
         System.out.println("tutkitaan onko " + name + " tietokannassa");
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = null;
@@ -67,7 +92,7 @@ public class BookDao implements Dao<Book, Integer> {
                 stmt = conn.prepareStatement("SELECT * FROM Tags WHERE tagName = ?");
                 stmt.setString(1, name);
             } else {
-                throw new IllegalArgumentException("a searchtype was used that is not supported by method"); 
+                throw new IllegalArgumentException("a searchtype was used that is not supported by method");
             }
             ResultSet result = stmt.executeQuery();
             if (!result.next()) {
@@ -79,7 +104,14 @@ public class BookDao implements Dao<Book, Integer> {
         return true;
     }
 
-        public List<Book> findAllWithTitle(String title) throws SQLException {
+    /**
+     * Returns all the books with the given title
+     * 
+     * @param title
+     * @return
+     * @throws SQLException 
+     */
+    public List<Book> findAllWithTitle(String title) throws SQLException {
         title = title.toLowerCase();
         List<Book> users = new ArrayList<>();
         if (!existsInDatabase(title, "booktitle")) {
@@ -101,7 +133,14 @@ public class BookDao implements Dao<Book, Integer> {
         System.out.println("Kirjat haettu titlellä");
         return users;
     }
-    
+
+    /**
+     * Returns all the books with the give tag
+     * 
+     * @param tag
+     * @return
+     * @throws SQLException 
+     */
     public List<Book> findAllWithTag(String tag) throws SQLException {
         tag = tag.toLowerCase();
         List<Book> users = new ArrayList<>();
@@ -128,6 +167,13 @@ public class BookDao implements Dao<Book, Integer> {
         return users;
     }
 
+    /**
+     * Saves a new Book object into the database
+     *
+     * @param book
+     * @return
+     * @throws SQLException
+     */
     @Override
     public Book save(Book book) throws SQLException {
         Book byName = findByName(book.getTitle());
@@ -153,6 +199,13 @@ public class BookDao implements Dao<Book, Integer> {
 
     }
 
+    /**
+     * Updates an existing Book-object in the database
+     * 
+     * @param book
+     * @return
+     * @throws SQLException 
+     */
     @Override
     public Book update(Book book) throws SQLException {
 //        Book book = findOne(id);
@@ -172,6 +225,12 @@ public class BookDao implements Dao<Book, Integer> {
         return findByName(book.getTitle());
     }
 
+    /**
+     * Checks whether the name of a new book adheres to our naming rules
+     * 
+     * @param name
+     * @return 
+     */
     public ArrayList<String> validateName(String name) {
         ArrayList<String> errors = new ArrayList<>();
         if (name.length() < 3) {
@@ -180,6 +239,13 @@ public class BookDao implements Dao<Book, Integer> {
         return errors;
     }
 
+    /**
+     * Saves and updates new tags into the database, is called when books are updated or created
+     * 
+     * @param tags
+     * @param title
+     * @throws SQLException 
+     */
     public void saveOrUpdateTags(String tags, String title) throws SQLException {
         if (tags == null || title == null) {
             return;
@@ -205,30 +271,13 @@ public class BookDao implements Dao<Book, Integer> {
 
     }
 
-//    public String findTagsAndReturnAsCommaSeparatedString(int id) throws SQLException {
-//        try (Connection conn = database.getConnection()) {
-//            PreparedStatement tagit = conn.prepareStatement("SELECT tagName FROM Tags"
-//                    + "LEFT JOIN BookTags ON Tags.tag_id = BookTags.tag_id"
-//                    + "LEFT JOIN Book ON BookTags.book_id = Book.id"
-//                    + "WHERE Book.id = ?");
-//
-//            tagit.setInt(1, id);
-//            ResultSet tagsResult = tagit.executeQuery();
-//            if (!tagsResult.next()) {
-//                return null;
-//            }
-//            StringBuilder builder = new StringBuilder();
-//            while (tagsResult.next()) {
-//                builder.append(tagsResult.getString("tagName"));
-//                if (!tagsResult.isLast()) {
-//                    builder.append(", ");
-//                }
-//            }
-//            String tagsToReturn = builder.toString();
-//            return tagsToReturn;
-//        }
-//    }
-
+    /**
+     * Returns books from the database which have the searched title
+     * 
+     * @param title
+     * @return
+     * @throws SQLException 
+     */
     public Book findByName(String title) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Book WHERE title = ?");
@@ -243,21 +292,27 @@ public class BookDao implements Dao<Book, Integer> {
         }
     }
 
+    /**
+     * Deletes a book from the database, and removes the junction tables related to the book
+     * 
+     * @param key
+     * @throws SQLException 
+     */
     @Override
     public void delete(Integer key) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement statement = connection.prepareStatement("DELETE FROM Book WHERE id = ?;DELETE FROM BookTags WHERE id = ?");
         statement.setInt(1, key);
         statement.executeUpdate();
-
-//        statement.close();
-//        PreparedStatement stmt = connection.prepareStatement("DELETE OR IGNORE FROM BookTags WHERE book_id = ?");
-//        statement.setInt(1, key);
-//        stmt.executeUpdate();
-//        stmt.close();
         connection.close();
     }
 
+    /**
+     * Returns a list of books that have been marked read
+     * 
+     * @return
+     * @throws SQLException 
+     */
     @Override
     public List<Book> findread() throws SQLException {
         List<Book> users = new ArrayList<>();
@@ -273,6 +328,12 @@ public class BookDao implements Dao<Book, Integer> {
         return users;
     }
 
+    /**
+     * Returns a list of books that have been marked unread
+     * 
+     * @return
+     * @throws SQLException 
+     */
     @Override
     public List<Book> findunread() throws SQLException {
         List<Book> users = new ArrayList<>();
@@ -287,7 +348,14 @@ public class BookDao implements Dao<Book, Integer> {
 
         return users;
     }
-    
+
+    /**
+     * Marks a book as read into the Book table
+     * 
+     * @param id
+     * @param read
+     * @throws SQLException 
+     */
     @Override
     public void markAsRead(Integer id, int read) throws SQLException {
         Book book = findOne(id);

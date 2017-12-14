@@ -10,6 +10,11 @@ import ohtu.database.Database;
 import ohtu.domain.Book;
 import ohtu.domain.Video;
 
+/**
+ * VideoDao contains all the backend methods that revolve around Videos
+ * 
+ * @author Tiimi.RE
+ */
 public class VideoDao implements Dao<Video, Integer> {
 
     private Database database;
@@ -18,6 +23,13 @@ public class VideoDao implements Dao<Video, Integer> {
         this.database = database;
     }
 
+    /**
+     * Searches the database for a single item from the Video table
+     * 
+     * @param key
+     * @return
+     * @throws SQLException 
+     */
     @Override
     public Video findOne(Integer key) throws SQLException {
         try (Connection conn = database.getConnection()) {
@@ -34,6 +46,12 @@ public class VideoDao implements Dao<Video, Integer> {
         }
     }
 
+    /**
+     * Finds and returns all the items from the Video table
+     * 
+     * @return
+     * @throws SQLException 
+     */
     @Override
     public List<Video> findAll() throws SQLException {
         List<Video> users = new ArrayList<>();
@@ -49,7 +67,14 @@ public class VideoDao implements Dao<Video, Integer> {
         return users;
     }
 
-    
+    /**
+     * Checks whether an entry exists in the database
+     * 
+     * @param name
+     * @param searchType
+     * @return
+     * @throws SQLException 
+     */
     public boolean existsInDatabase(String name, String searchType) throws SQLException {
         System.out.println("tutkitaan onko " + name + " tietokannassa");
         try (Connection conn = database.getConnection()) {
@@ -73,6 +98,12 @@ public class VideoDao implements Dao<Video, Integer> {
         return true;
     }
 
+    /**
+     * Returns all the videos with the given title
+     * @param title
+     * @return
+     * @throws SQLException 
+     */
     public List<Video> findAllWithTitle(String title) throws SQLException {
         title = title.toLowerCase();
         List<Video> users = new ArrayList<>();
@@ -96,6 +127,13 @@ public class VideoDao implements Dao<Video, Integer> {
         return users;
     }
 
+    /**
+     * Returns all the videos with the give tag
+     * 
+     * @param tag
+     * @return
+     * @throws SQLException 
+     */
     public List<Video> findAllWithTag(String tag) throws SQLException {
         tag = tag.toLowerCase();
         List<Video> users = new ArrayList<>();
@@ -123,6 +161,13 @@ public class VideoDao implements Dao<Video, Integer> {
         return users;
     }
 
+    /**
+     * Saves a new Video-object into the database
+     * 
+     * @param video
+     * @return
+     * @throws SQLException 
+     */
     @Override
     public Video save(Video video) throws SQLException {
         Video byName = findByName(video.getTitle());
@@ -148,6 +193,13 @@ public class VideoDao implements Dao<Video, Integer> {
 
     }
 
+    /**
+     * Updates an existing Video-object in the database and adds tags to the database
+     * 
+     * @param video
+     * @return
+     * @throws SQLException 
+     */
     @Override
     public Video update(Video video) throws SQLException {
 //        video video = findOne(id);
@@ -167,6 +219,13 @@ public class VideoDao implements Dao<Video, Integer> {
         return findByName(video.getTitle());
     }
 
+    /**
+     * Saves and updates new tags into the database, is called when videos are updated or created
+     * 
+     * @param tags
+     * @param title
+     * @throws SQLException 
+     */
     public void saveOrUpdateTags(String tags, String title) throws SQLException {
         if (tags == null || title == null) {
             return;
@@ -192,6 +251,12 @@ public class VideoDao implements Dao<Video, Integer> {
 
     }
 
+    /**
+     * Returns videos from the database which have the searched title
+     * @param title
+     * @return
+     * @throws SQLException 
+     */
     public Video findByName(String title) throws SQLException {
         try (Connection conn = database.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Video WHERE title = ?");
@@ -206,6 +271,12 @@ public class VideoDao implements Dao<Video, Integer> {
         }
     }
 
+    /**
+     * Deletes a video from the database, and removes the junction tables related to the video
+     * 
+     * @param key
+     * @throws SQLException 
+     */
     @Override
     public void delete(Integer key) throws SQLException {
         try (Connection connection = database.getConnection()) {
@@ -216,6 +287,11 @@ public class VideoDao implements Dao<Video, Integer> {
         }
     }
 
+    /**
+     * Returns a list of videos that have been marked read
+     * @return
+     * @throws SQLException 
+     */
     @Override
     public List<Video> findread() throws SQLException {
         List<Video> users = new ArrayList<>();
@@ -231,6 +307,11 @@ public class VideoDao implements Dao<Video, Integer> {
         return users;
     }
 
+    /**
+     * Returns a list of videos that have been marked unread
+     * @return
+     * @throws SQLException 
+     */
     @Override
     public List<Video> findunread() throws SQLException {
         List<Video> users = new ArrayList<>();
@@ -245,7 +326,14 @@ public class VideoDao implements Dao<Video, Integer> {
 
         return users;
     }
-
+    
+    /**
+     * Marks a video as read into the Video table
+     * 
+     * @param id
+     * @param watched
+     * @throws SQLException 
+     */
     @Override
     public void markAsRead(Integer id, int watched) throws SQLException {
         Video video = findOne(id);
