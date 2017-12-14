@@ -14,3 +14,4 @@
 
 [Heroku](https://salty-hollows-62760.herokuapp.com/)
 
+[Database Diagram](https://drive.google.com/file/d/18GPTqD30xxtO8lW9JomZUp4jAsaUuNfu/view?usp=sharing)
