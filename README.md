@@ -16,7 +16,7 @@
 [Database Diagram](https://drive.google.com/file/d/18GPTqD30xxtO8lW9JomZUp4jAsaUuNfu/view?usp=sharing)
 
 
-[Loppu raportti](https://docs.google.com/document/d/1REls_RZnPxVoOkYK6U_d1W6Fobh4iffYOvrwNAt9vQM/edit)
+[Loppuraportti](https://docs.google.com/document/d/1REls_RZnPxVoOkYK6U_d1W6Fobh4iffYOvrwNAt9vQM/edit)
 
 
 [Heroku (ei toimi)](https://salty-hollows-62760.herokuapp.com/)
